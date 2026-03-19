@@ -1,16 +1,13 @@
 import os
 from groq import Groq
 
-# Initialize Groq client with API key from environment
-api_key = os.getenv("GROQ_API_KEY")
-if not api_key:
-    raise ValueError(
-        "❌ GROQ_API_KEY not set. Please set it:\n"
-        "   export GROQ_API_KEY='your-api-key'\n"
-        "Get your key at: https://console.groq.com"
-    )
-
-client = Groq(api_key=api_key)
+def _get_client():
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise ValueError(
+            "GROQ_API_KEY is not set. Configure it in your environment before using the assistant."
+        )
+    return Groq(api_key=api_key)
 
 def explain_casting(sample, defects):
 
@@ -34,6 +31,8 @@ Explain:
 
 Keep it clear and engineering-focused.
 """
+
+    client = _get_client()
 
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",

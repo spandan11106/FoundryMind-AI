@@ -10,9 +10,6 @@ __pycache__/
 dist/
 build/
 
-# Models
-models/
-
 # Data
 data/
 
@@ -20,6 +17,12 @@ data/
 .vscode/
 .idea/
 *.swp
+
+# Node / Next.js
+node_modules/
+.next/
+frontend/node_modules/
+frontend/.next/
 
 # Streamlit
 .streamlit/

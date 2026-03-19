@@ -1,0 +1,271 @@
+:root {
+  --bg: #f2f6f4;
+  --surface: #ffffff;
+  --surface-2: #f8fbfa;
+  --text: #152223;
+  --muted: #5f6f72;
+  --accent: #0f766e;
+  --accent-2: #f59e0b;
+  --danger: #c2410c;
+  --border: #d7e3df;
+  --shadow: 0 10px 30px rgba(23, 61, 57, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at 5% 10%, #daf2ed 0, transparent 35%),
+    radial-gradient(circle at 95% 95%, #ffe9c7 0, transparent 30%),
+    var(--bg);
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.2rem 4rem;
+}
+
+.hero {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.eyebrow {
+  margin: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+h1 {
+  margin: 0.4rem 0;
+  font-size: clamp(1.7rem, 5vw, 2.8rem);
+  line-height: 1.12;
+}
+
+.subtitle {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--muted);
+}
+
+.statusCard {
+  min-width: 160px;
+  background: linear-gradient(135deg, #0f766e, #115e59);
+  color: #eafaf7;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+.status {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.label {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.tabs {
+  margin-top: 1.6rem;
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.tab {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #effffb;
+}
+
+.panel {
+  margin-top: 1rem;
+  padding: 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.panelHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+h2,
+h3 {
+  margin: 0;
+}
+
+.button {
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0f766e, #0a4f4a);
+  color: #f1fffb;
+  padding: 0.65rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.metric {
+  margin: 0.3rem 0 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.plainList {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0;
+}
+
+.plainList li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--border);
+  padding: 0.65rem 0;
+}
+
+.plainList li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.inlineGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 0.16rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge.good {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge.medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge.bad {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.error {
+  margin: 0.6rem 0;
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.inputGroup {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+.inputGroup span {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  background: #fcfffe;
+}
+
+.factoryForm,
+.assistantForm {
+  margin-bottom: 1rem;
+}
+
+.markdown p {
+  white-space: pre-wrap;
+  line-height: 1.55;
+}
+
+@media (max-width: 900px) {
+  .grid.three,
+  .grid.two {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    flex-direction: column;
+  }
+
+  .statusCard {
+    width: 100%;
+  }
+
+  .panelHead {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -3,12 +3,16 @@ import pandas as pd
 import joblib
 import random
 
-# -----------------------
-# Load model
-# -----------------------
-bundle = joblib.load("models/casting_model.pkl")
-model = bundle["model"]
-encoders = bundle["encoders"]
+model = None
+encoders = None
+
+
+def _load_bundle():
+    global model, encoders
+    if model is None or encoders is None:
+        bundle = joblib.load("models/casting_model.pkl")
+        model = bundle["model"]
+        encoders = bundle["encoders"]
 
 # -----------------------
 # Search space
@@ -16,6 +20,23 @@ encoders = bundle["encoders"]
 metal_types = ["Aluminum", "Steel", "Cast Iron"]
 mold_materials = ["sand", "die", "ceramic"]
 cooling_rates = ["low", "medium", "high"]
+
+
+def _normalize_sample(sample):
+    normalized = sample.copy()
+
+    if normalized["metal_type"] not in metal_types:
+        raise ValueError(f"metal_type must be one of: {metal_types}")
+    if normalized["mold_material"] not in mold_materials:
+        raise ValueError(f"mold_material must be one of: {mold_materials}")
+    if normalized["cooling_rate"] not in cooling_rates:
+        raise ValueError(f"cooling_rate must be one of: {cooling_rates}")
+
+    normalized["pouring_temperature"] = float(np.clip(normalized["pouring_temperature"], 600, 800))
+    normalized["section_thickness"] = float(np.clip(normalized["section_thickness"], 5, 50))
+    normalized["pouring_speed"] = float(np.clip(normalized["pouring_speed"], 0.5, 2.0))
+
+    return normalized
 
 # -----------------------
 # Random sample generator
@@ -34,6 +55,7 @@ def random_sample():
 # Encode input (FIXED)
 # -----------------------
 def encode_input(sample):
+    _load_bundle()
     encoded = sample.copy()
 
     for col in ["metal_type", "mold_material", "cooling_rate"]:
@@ -122,11 +144,23 @@ def mutate(sample):
 # -----------------------
 # Optimization (HYBRID SEARCH)
 # -----------------------
-def optimize(n_trials=200, local_steps=50):
+def optimize(n_trials=200, local_steps=50, initial_sample=None):
+    _load_bundle()
 
-    best_sample = random_sample()
+    if initial_sample is not None:
+        best_sample = _normalize_sample(initial_sample)
+    else:
+        best_sample = random_sample()
+
     best_score = float("inf")
     best_probs = None
+
+    # Evaluate user-provided starting point first, when present.
+    X0 = encode_input(best_sample)
+    probs0 = model.predict_proba(X0)
+    defect_probs0 = [p[0][1] for p in probs0]
+    best_score = defect_score(defect_probs0, best_sample)
+    best_probs = defect_probs0
 
     # -------- Global search --------
     for _ in range(n_trials):
