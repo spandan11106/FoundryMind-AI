@@ -8,6 +8,10 @@ FoundryMind AI is structured for cloud deployment with:
 - A FastAPI backend in `backend/` for Python ML inference
 - Existing ML training/inference modules in `src/`
 
+<p align="center">
+   <a href="https://foundry-mind-ai.vercel.app/" style="display:inline-block;padding:12px 18px;background:#111;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;">Launch FoundryMind AI</a>
+</p>
+
 ## Why This Matters for Manufacturing
 
 - Reduce scrap and rework by optimizing casting parameters before a heat hits the line.
