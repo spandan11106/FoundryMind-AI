@@ -1,14 +1,16 @@
 :root {
-  --bg: #f2f6f4;
-  --surface: #ffffff;
-  --surface-2: #f8fbfa;
-  --text: #152223;
-  --muted: #5f6f72;
-  --accent: #0f766e;
-  --accent-2: #f59e0b;
-  --danger: #c2410c;
-  --border: #d7e3df;
-  --shadow: 0 10px 30px rgba(23, 61, 57, 0.08);
+  --bg: #050a12;
+  --bg-2: #0b1320;
+  --surface: #0f1b2c;
+  --surface-2: #111f33;
+  --text: #e8f1ff;
+  --muted: #9fb4d0;
+  --accent: #5af2c5;
+  --accent-2: #8dd1ff;
+  --danger: #ff7b7b;
+  --border: #1e2c42;
+  --shadow: 0 20px 60px rgba(6, 16, 32, 0.55);
+  --glow: 0 0 0 1px rgba(90, 242, 197, 0.3), 0 10px 40px rgba(90, 242, 197, 0.2);
 }
 
 * {
@@ -21,22 +23,33 @@ body {
   padding: 0;
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
   color: var(--text);
-  background: radial-gradient(circle at 5% 10%, #daf2ed 0, transparent 35%),
-    radial-gradient(circle at 95% 95%, #ffe9c7 0, transparent 30%),
+  background: radial-gradient(circle at 15% 10%, rgba(90, 242, 197, 0.08) 0, transparent 35%),
+    radial-gradient(circle at 85% 80%, rgba(141, 209, 255, 0.1) 0, transparent 32%),
+    linear-gradient(120deg, #060b15 0%, #081020 45%, #060b15 100%);
+  min-height: 100vh;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+  background: radial-gradient(circle at 10% 20%, rgba(90, 242, 197, 0.05) 0, transparent 30%),
+    radial-gradient(circle at 90% 60%, rgba(141, 209, 255, 0.07) 0, transparent 26%),
     var(--bg);
 }
 
 .page {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem 1.2rem 4rem;
+  padding: 2.2rem 2.4rem 4rem;
 }
 
 .hero {
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: stretch;
+  padding: 1.4rem 0 2rem;
 }
 
 .eyebrow {
@@ -49,23 +62,30 @@ body {
 
 h1 {
   margin: 0.4rem 0;
-  font-size: clamp(1.7rem, 5vw, 2.8rem);
-  line-height: 1.12;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
 }
 
 .subtitle {
   margin: 0;
   max-width: 62ch;
   color: var(--muted);
+  line-height: 1.6;
+}
+
+.statusStack {
+  display: grid;
+  gap: 1rem;
 }
 
 .statusCard {
-  min-width: 160px;
-  background: linear-gradient(135deg, #0f766e, #115e59);
-  color: #eafaf7;
-  padding: 1rem;
-  border-radius: 16px;
+  min-width: 200px;
+  background: linear-gradient(145deg, rgba(90, 242, 197, 0.08), rgba(141, 209, 255, 0.06));
+  color: var(--text);
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
   box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
 .status {
@@ -89,25 +109,28 @@ h1 {
 
 .tab {
   border: 1px solid var(--border);
-  background: var(--surface);
-  padding: 0.65rem 1rem;
-  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.75rem 1.1rem;
+  border-radius: 14px;
   cursor: pointer;
   font-size: 0.95rem;
+  color: var(--muted);
+  transition: border 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .tab.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #effffb;
+  background: linear-gradient(135deg, rgba(90, 242, 197, 0.18), rgba(141, 209, 255, 0.12));
+  border-color: rgba(90, 242, 197, 0.5);
+  color: var(--text);
+  box-shadow: var(--glow);
 }
 
 .panel {
   margin-top: 1rem;
   padding: 1.1rem;
-  background: var(--surface);
+  background: linear-gradient(145deg, rgba(17, 27, 44, 0.9), rgba(15, 23, 36, 0.92));
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 20px;
   box-shadow: var(--shadow);
 }
 
@@ -124,14 +147,22 @@ h3 {
   margin: 0;
 }
 
+.hint {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
 .button {
   border: 0;
   border-radius: 12px;
-  background: linear-gradient(135deg, #0f766e, #0a4f4a);
-  color: #f1fffb;
-  padding: 0.65rem 1rem;
-  font-size: 0.95rem;
+  background: linear-gradient(135deg, #5af2c5, #2cc0ff);
+  color: #031018;
+  padding: 0.65rem 1.1rem;
+  font-size: 0.98rem;
   cursor: pointer;
+  font-weight: 700;
+  box-shadow: var(--glow);
 }
 
 .button:disabled {
@@ -155,8 +186,9 @@ h3 {
 .card {
   background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 .metric {
@@ -234,10 +266,11 @@ select,
 textarea {
   width: 100%;
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.6rem 0.75rem;
+  border-radius: 12px;
+  padding: 0.7rem 0.85rem;
   font: inherit;
-  background: #fcfffe;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
 }
 
 .factoryForm,
@@ -250,7 +283,174 @@ textarea {
   line-height: 1.55;
 }
 
+.rail {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  padding: 2rem 1.2rem;
+  border-right: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(17, 27, 44, 0.95), rgba(17, 27, 44, 0.8));
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.railBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 8px rgba(90, 242, 197, 0.08);
+}
+
+.railGroup {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.railButton {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
+  padding: 0.8rem 0.9rem;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.railButton:hover {
+  background: rgba(90, 242, 197, 0.06);
+  border-color: rgba(90, 242, 197, 0.4);
+  transform: translateX(2px);
+}
+
+.railButton.active {
+  box-shadow: var(--glow);
+  border-color: rgba(90, 242, 197, 0.5);
+}
+
+.railButton.ghost {
+  border-style: dashed;
+}
+
+.railCard {
+  margin-top: auto;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.24rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  font-size: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pill.success {
+  background: rgba(90, 242, 197, 0.12);
+  color: #b9ffe9;
+  border-color: rgba(90, 242, 197, 0.4);
+}
+
+.sparkline {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.glow {
+  box-shadow: var(--glow);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+}
+
+.assistantDrawer {
+  position: fixed;
+  right: -420px;
+  top: 0;
+  width: 400px;
+  height: 100vh;
+  background: linear-gradient(180deg, rgba(17, 27, 44, 0.98), rgba(11, 19, 32, 0.95));
+  border-left: 1px solid var(--border);
+  padding: 1.4rem;
+  box-shadow: -10px 0 50px rgba(0, 0, 0, 0.35);
+  transition: right 0.25s ease;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.assistantDrawer.open {
+  right: 0;
+}
+
+.drawerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.closeButton {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.how .card {
+  min-height: 160px;
+}
+
 @media (max-width: 900px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .rail {
+    position: relative;
+    height: auto;
+    flex-direction: row;
+    gap: 0.6rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+
+  .railGroup {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .page {
+    padding: 1.5rem;
+  }
+
   .grid.three,
   .grid.two {
     grid-template-columns: 1fr;
@@ -260,12 +460,17 @@ textarea {
     flex-direction: column;
   }
 
-  .statusCard {
+  .statusCard,
+  .railCard {
     width: 100%;
   }
 
   .panelHead {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .assistantDrawer {
+    width: 100%;
   }
 }
