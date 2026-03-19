@@ -1,19 +1,45 @@
+import os
+from groq import Groq
+
+# Initialize Groq client with API key from environment
+api_key = os.getenv("GROQ_API_KEY")
+if not api_key:
+    raise ValueError(
+        "❌ GROQ_API_KEY not set. Please set it:\n"
+        "   export GROQ_API_KEY='your-api-key'\n"
+        "Get your key at: https://console.groq.com"
+    )
+
+client = Groq(api_key=api_key)
+
 def explain_casting(sample, defects):
 
     porosity, shrinkage, cold_shut = defects
 
-    explanation = []
+    prompt = f"""
+You are a manufacturing expert specializing in metal casting.
 
-    if porosity > 0.3:
-        explanation.append("High porosity due to turbulence or high pouring speed.")
+Process parameters:
+{sample}
 
-    if shrinkage > 0.3:
-        explanation.append("Shrinkage caused by slow cooling and improper solidification.")
+Predicted defects:
+- Porosity: {porosity}
+- Shrinkage: {shrinkage}
+- Cold Shut: {cold_shut}
 
-    if cold_shut > 0.3:
-        explanation.append("Cold shut due to low fluidity or thin sections.")
+Explain:
+1. Why these defects occur
+2. The physical/metallurgical reasons
+3. How to reduce them
 
-    if not explanation:
-        explanation.append("Casting conditions are near optimal with minimal defects.")
+Keep it clear and engineering-focused.
+"""
 
-    return "\n".join(explanation)
+    response = client.chat.completions.create(
+        model="mixtral-8x7b-32768",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.3,
+        max_tokens=1024
+    )
+
+    return response.choices[0].message.content
