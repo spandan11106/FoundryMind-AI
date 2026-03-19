@@ -12,6 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.casting.optimizer import optimize
 from src.llm.assistant import explain_casting
+from src.factory.predict import predict_factory
 
 # -----------------------
 # Page Configuration
@@ -217,14 +218,154 @@ with tab1:
             st.info("Sample data loaded. Adjust parameters and optimize.")
 
 # =======================
-# TAB 2: ANALYSIS
+# TAB 2: FACTORY ANALYSIS
 # =======================
 with tab2:
-    st.header("📊 Factory Analysis Dashboard")
+    st.header("🏭 Factory Performance Predictor")
     
-    col1, col2 = st.columns(2)
+    st.markdown("Predict factory performance using machine learning model.")
+    
+    col1, col2, col3 = st.columns(3)
     
     with col1:
+        st.subheader("⚙️ Input Parameters")
+        # Note: Adjust these based on your factory_model.pkl features
+        param1 = st.number_input("Production Volume", value=100, min_value=0, max_value=10000)
+        param2 = st.number_input("Quality Score", value=85.0, min_value=0.0, max_value=100.0)
+        param3 = st.number_input("Equipment Age (years)", value=5, min_value=0, max_value=50)
+    
+    with col2:
+        st.subheader("📊 Workforce")
+        param4 = st.number_input("Staff Count", value=50, min_value=1, max_value=500)
+        param5 = st.number_input("Training Hours", value=40, min_value=0, max_value=200)
+        param6 = st.number_input("Efficiency Rate (%)", value=75.0, min_value=0.0, max_value=100.0)
+    
+    with col3:
+        st.subheader("🔧 Maintenance")
+        param7 = st.number_input("Maintenance Cost ($)", value=5000, min_value=0, max_value=100000)
+        param8 = st.number_input("Downtime Hours", value=10, min_value=0, max_value=200)
+        param9 = st.number_input("Equipment Health (%)", value=90.0, min_value=0.0, max_value=100.0)
+    
+    st.markdown("---")
+    
+    col_predict1, col_predict2 = st.columns([2, 1])
+    
+    with col_predict1:
+        if st.button("🚀 Predict Factory Performance", use_container_width=True):
+            with st.spinner("Analyzing factory data..."):
+                try:
+                    # Create input dictionary for factory model
+                    factory_input = {
+                        'production_volume': param1,
+                        'quality_score': param2,
+                        'equipment_age': param3,
+                        'staff_count': param4,
+                        'training_hours': param5,
+                        'efficiency_rate': param6,
+                        'maintenance_cost': param7,
+                        'downtime_hours': param8,
+                        'equipment_health': param9
+                    }
+                    
+                    # Make prediction
+                    prediction, probability = predict_factory(factory_input)
+                    
+                    st.subheader("✅ Factory Performance Analysis")
+                    
+                    metric_col1, metric_col2, metric_col3 = st.columns(3)
+                    
+                    with metric_col1:
+                        status_emoji = "✅" if prediction == 1 else "⚠️"
+                        st.metric("Status", f"{status_emoji} {'Healthy' if prediction == 1 else 'Needs Attention'}")
+                    
+                    with metric_col2:
+                        st.metric("Performance Score", f"{probability*100:.1f}%", delta=f"{probability*100-75:.1f}%")
+                    
+                    with metric_col3:
+                        risk_level = "🟢 Low" if probability > 0.7 else "🟡 Medium" if probability > 0.4 else "🔴 High"
+                        st.metric("Risk Level", risk_level)
+                    
+                    st.markdown("---")
+                    
+                    # Performance breakdown chart
+                    col_chart1, col_chart2 = st.columns(2)
+                    
+                    with col_chart1:
+                        metrics_data = pd.DataFrame({
+                            'Factor': ['Quality', 'Efficiency', 'Equipment\nHealth', 'Training', 'Availability'],
+                            'Score': [param2, param6, param9, (param5/200)*100, 100-(param8/200)*100]
+                        })
+                        fig = px.bar(metrics_data, x='Factor', y='Score', 
+                                    color='Score', color_continuous_scale='RdYlGn',
+                                    range_color=[0, 100], title="Factory Health Metrics")
+                        fig.update_layout(height=400, showlegend=False)
+                        st.plotly_chart(fig, use_container_width=True)
+                    
+                    with col_chart2:
+                        # Gauge chart for overall performance
+                        fig = go.Figure(data=[go.Indicator(
+                            mode="gauge+number+delta",
+                            value=probability*100,
+                            domain={'x': [0, 1], 'y': [0, 1]},
+                            title={'text': "Overall Performance"},
+                            delta={'reference': 75},
+                            gauge={
+                                'axis': {'range': [None, 100]},
+                                'bar': {'color': "darkblue"},
+                                'steps': [
+                                    {'range': [0, 50], 'color': "#f5f5f5"},
+                                    {'range': [50, 75], 'color': "#fff8f0"}
+                                ],
+                                'threshold': {
+                                    'line': {'color': "red", 'width': 4},
+                                    'thickness': 0.75,
+                                    'value': 90
+                                }
+                            }
+                        )])
+                        fig.update_layout(height=400)
+                        st.plotly_chart(fig, use_container_width=True)
+                    
+                    st.markdown("---")
+                    
+                    # Recommendations based on prediction
+                    if prediction == 0:
+                        st.warning("⚠️ Factory Performance Issues Detected")
+                        st.markdown("""
+                        **Recommendations:**
+                        - Increase preventive maintenance frequency
+                        - Review equipment maintenance schedules
+                        - Conduct staff retraining programs
+                        - Analyze quality control processes
+                        """)
+                    else:
+                        st.success("✨ Factory Operating Optimally")
+                        st.markdown("""
+                        **Good Performance Indicators:**
+                        - Equipment is in good condition
+                        - Staff efficiency is high
+                        - Quality metrics are stable
+                        - Maintenance is adequate
+                        """)
+                    
+                except FileNotFoundError:
+                    st.error("❌ Factory model not found. Please train the factory model first.")
+                except Exception as e:
+                    st.error(f"❌ Prediction failed: {str(e)}")
+    
+    with col_predict2:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("📊 Use Average", use_container_width=True):
+            st.info("Sample parameters loaded")
+    
+    st.markdown("---")
+    
+    # Historical data visualization
+    st.subheader("📈 Factory Data Analysis")
+    
+    col_data1, col_data2 = st.columns(2)
+    
+    with col_data1:
         st.subheader("Defect Distribution")
         try:
             data = pd.read_csv("data/raw/synthetic_data.csv")
@@ -238,7 +379,7 @@ with tab2:
         except:
             st.warning("⚠️ Dataset not found")
     
-    with col2:
+    with col_data2:
         st.subheader("Metal Type Distribution")
         try:
             metal_dist = data['metal_type'].value_counts()
