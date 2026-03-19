@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 import { explainAssistant, optimizeCasting, predictFactory } from "../lib/api";
 
 const TABS = [
@@ -84,6 +85,29 @@ export default function HomePage() {
   const [assistantLoading, setAssistantLoading] = useState(false);
   const [assistantError, setAssistantError] = useState("");
   const [assistantAnswer, setAssistantAnswer] = useState("");
+
+  const [drawerWidth, setDrawerWidth] = useState(420);
+  const dragging = useRef(false);
+
+  const handleDragStart = useCallback((e) => {
+    e.preventDefault();
+    dragging.current = true;
+
+    function onMove(ev) {
+      if (!dragging.current) return;
+      const newWidth = window.innerWidth - ev.clientX;
+      setDrawerWidth(Math.max(320, Math.min(newWidth, 800)));
+    }
+
+    function onUp() {
+      dragging.current = false;
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    }
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  }, []);
 
   const defectRows = useMemo(() => {
     if (!castingResult) return [];
@@ -452,7 +476,14 @@ export default function HomePage() {
 
       {assistantOpen && <div className="drawerOverlay" onClick={() => setAssistantOpen(false)} />}
 
-      <div className={`assistantDrawer ${assistantOpen ? "open" : ""}`} role="dialog" aria-label="AI assistant">
+      <div
+        className={`assistantDrawer ${assistantOpen ? "open" : ""}`}
+        role="dialog"
+        aria-label="AI assistant"
+        style={{ width: drawerWidth }}
+      >
+        <div className="drawerResize" onMouseDown={handleDragStart} title="Drag to resize" />
+
         <div className="drawerHeader">
           <div>
             <h3>AI Assistant</h3>
@@ -480,7 +511,9 @@ export default function HomePage() {
         {assistantError && <p className="error">{assistantError}</p>}
         {assistantAnswer && (
           <article className="card assistantResponse fadeIn">
-            <p>{assistantAnswer}</p>
+            <div className="markdown">
+              <ReactMarkdown>{assistantAnswer}</ReactMarkdown>
+            </div>
           </article>
         )}
       </div>
