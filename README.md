@@ -1,10 +1,25 @@
 # FoundryMind AI
 
-FoundryMind AI is now structured for cloud deployment with:
+FoundryMind AI applies machine learning to manufacturing operations so teams can move from gut-feel adjustments to data-driven, closed-loop decisions. It pairs optimization models for casting with predictive models for factory performance and an LLM assistant that translates model outputs into operator-friendly guidance.
+
+FoundryMind AI is structured for cloud deployment with:
 
 - A Next.js frontend in `frontend/` for Vercel
 - A FastAPI backend in `backend/` for Python ML inference
 - Existing ML training/inference modules in `src/`
+
+## Why This Matters for Manufacturing
+
+- Reduce scrap and rework by optimizing casting parameters before a heat hits the line.
+- Improve throughput and OEE with forward-looking predictions on cycle times, bottlenecks, and quality risk.
+- Shorten troubleshooting cycles with an LLM copilot that explains recommendations in process language operators already use.
+- Deployable in typical factory constraints: on-prem or cloud, with small-footprint models that run via FastAPI.
+
+## Core Capabilities
+
+- Casting optimization: `POST /api/casting/optimize` evaluates candidate melt/chemistry/settings and suggests improved process parameters.
+- Factory performance prediction: `POST /api/factory/predict` forecasts outcomes (yield/defects/throughput) from planned runs or schedule changes.
+- LLM assistant: `POST /api/assistant/explain` turns raw model outputs into contextual, stepwise guidance for technicians and engineers.
 
 ## Architecture
 
